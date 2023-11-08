@@ -1,0 +1,36 @@
+Makefile
+verst
+*/.DS_Store
+
+
+db.sqlite3
+
+.coverage
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+.mypy_cache/
+.cache/
+*.py[cod]
+*$py.class
+*.DS_Store*
+
+# IDE stuff:
+.idea/
+.vscode/
+
+# virtualenv
+.env/
+.env
+.make.env
+# uploaded files
+/media/
+tmp/
+
+
+
+# compiled translation files
+*.mo
+
+# jupyter notebook
+*.ipynb
