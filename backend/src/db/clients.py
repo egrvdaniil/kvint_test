@@ -1,7 +1,7 @@
 
 from pymongo.results import UpdateResult
 
-from db.collections import PhoneCall
+from db.collections import PhoneCall, Task
 from taskiq import TaskiqResult
 from pydantic.generics import GenericModel
 
@@ -23,17 +23,17 @@ class PhoneCallsClient(BaseClient):
 class TasksClient(BaseClient):
     collection_name = 'tasks'
 
-    async def get_task_by_id(self, task_id: str) -> TaskiqResult | None:
+    async def get_task_by_id(self, task_id: str) -> Task | None:
         result = await self.collection.find_one(
             {'task_id': task_id},
         )
         if result is None:
             return None
-        return TaskiqResult(**result)
+        return Task(**result)
 
-    async def save_or_update_task(self, task: TaskiqResult, task_id: str) -> UpdateResult:
+    async def save_or_update_task(self, task: Task, task_id: str, upsert: bool = True) -> UpdateResult:
         return await self.collection.update_one(
             {'task_id': task_id},
             task.model_dump(),
-            upsert=True,
+            upsert=upsert,
         )

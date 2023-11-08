@@ -1,8 +1,9 @@
 from api import setup_endpoints  # type:ignore
-from broker_init import broker, result_backend
+from broker_init import broker
 from config import settings
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from db.clients import TasksClient
 from motor import motor_asyncio
 
 
@@ -11,6 +12,7 @@ async def startup(app):
         settings.MONGO_URI
     )
     app.database = app.db_client.get_database(settings.DATABASE_NAME)  # type:ignore
+    app.tasks_client = TasksClient(database=app.database)
     if not app.broker.is_worker_process:
         await app.broker.startup()
 
@@ -33,7 +35,6 @@ def init_app():
     )
 
     app.broker = broker
-    app.result_backend = result_backend
 
     app.add_event_handler("startup", startup(app))
     app.add_event_handler("shutdown", shutdown(app))
