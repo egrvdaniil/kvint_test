@@ -1,5 +1,4 @@
 from config import settings
-from database_init import database  # type:ignore
 from motor import motor_asyncio
 from result_backend import TasksResultBackend
 from taskiq import TaskiqEvents, TaskiqState
