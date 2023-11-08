@@ -1,12 +1,16 @@
 from api import setup_endpoints  # type:ignore
 from broker_init import broker, result_backend
 from config import settings
-from database_init import database, db_client
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from motor import motor_asyncio
 
 
 async def startup(app):
+    app.db_client = motor_asyncio.AsyncIOMotorClient(
+        settings.MONGO_URI
+    )
+    app.database = app.db_client.get_database(settings.DATABASE_NAME)  # type:ignore
     if not app.broker.is_worker_process:
         await app.broker.startup()
 
@@ -28,7 +32,6 @@ def init_app():
         allow_headers=["*"],
     )
 
-    app.db_client = db_client
     app.broker = broker
     app.result_backend = result_backend
 
