@@ -31,9 +31,9 @@ class TasksClient(BaseClient):
             return None
         return Task(**result)
 
-    async def save_or_update_task(self, task: Task, task_id: str, upsert: bool = True) -> UpdateResult:
+    async def save_or_update_task(self, task_data: Task, task_id: str, upsert: bool = True) -> UpdateResult:
         return await self.collection.update_one(
             {'task_id': task_id},
-            task.model_dump(),
+            task_data.model_dump(),
             upsert=upsert,
         )

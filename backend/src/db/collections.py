@@ -14,4 +14,4 @@ class Task(BaseModel):
     task_id: str
     task_status: str
     recived: datetime = Field(default_factory=datetime.now)
-    result: dict[str, Any] | None
+    result: dict[str, Any] | None = None

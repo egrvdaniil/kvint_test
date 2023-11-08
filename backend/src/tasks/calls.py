@@ -3,7 +3,7 @@ import asyncio
 
 
 async def aggregate_calls(
-    calls: list[str],
+    numbers: list[str],
     message_from: str | None = None,
     correlation_id: str | None = None,
 ):
