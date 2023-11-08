@@ -37,3 +37,7 @@ class TasksClient(BaseClient):
             task_data.model_dump(),
             upsert=upsert,
         )
+
+    async def get_statuses(self):
+        result = await self.collection.find({})
+        return result

@@ -22,6 +22,11 @@ class ReportResponse(BaseModel):
     total_duration: float
 
 
-class TaskStatus(BaseModel):
+class TaskStatusResponse(BaseModel):
     status: str
     task_id: str
+    response: ReportResponse | None = None
+
+
+class TaskStatusesListResponse(BaseModel):
+    statuses: list[TaskStatusResponse]
