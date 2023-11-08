@@ -24,3 +24,4 @@ class ReportResponse(BaseModel):
 
 class TaskStatus(BaseModel):
     status: str
+    task_id: str

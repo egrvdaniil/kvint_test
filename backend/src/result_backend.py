@@ -31,7 +31,7 @@ class TasksResultBackend(AsyncResultBackend):
         result: TaskiqResult,
     ) -> None:
         if not self.tasks_client:
-            raise Exception('Backend is not started')
+            raise Exception("Backend is not started")
         await self.tasks_client.save_or_update_task(
             task=result,
             task_id=task_id,
@@ -43,12 +43,12 @@ class TasksResultBackend(AsyncResultBackend):
         with_logs: bool = False,
     ) -> TaskiqResult:
         if not self.tasks_client:
-            raise Exception('Backend is not started')
+            raise Exception("Backend is not started")
         result = await self.tasks_client.get_task_by_id(
             task_id=task_id,
         )
         if result is None:
-            raise ValueError('Task does not exist')
+            raise ValueError("Task does not exist")
         return result
 
     async def is_result_ready(
