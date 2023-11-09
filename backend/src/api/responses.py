@@ -1,4 +1,6 @@
 from pydantic import BaseModel
+from typing import Any
+from datetime import datetime
 
 
 class CallDurationCount(BaseModel):
@@ -25,7 +27,10 @@ class ReportResponse(BaseModel):
 class TaskStatusResponse(BaseModel):
     status: str
     task_id: str
-    response: ReportResponse | None = None
+    task_name: str
+    recived: datetime
+    completed: datetime | None = None
+    result: Any | None = None
 
 
 class TaskStatusesListResponse(BaseModel):

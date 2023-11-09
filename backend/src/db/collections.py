@@ -13,5 +13,7 @@ class PhoneCall(BaseModel):
 class Task(BaseModel):
     task_id: str
     task_status: str
+    task_name: str
     recived: datetime = Field(default_factory=datetime.now)
-    result: dict[str, Any] | None = None
+    completed: datetime | None = None
+    result: Any | None = None

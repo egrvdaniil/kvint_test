@@ -10,11 +10,13 @@ import asyncio
 
 
 async def create_report(request: Request, report_request: ReportRequest):
+    task_name = 'tasks.calls:aggregate_calls'
     broker: AsyncBroker = request.app.broker
-    aggregate_calls: AsyncTaskiqDecoratedTask | None = broker.find_task('tasks.calls:aggregate_calls')
+    aggregate_calls: AsyncTaskiqDecoratedTask | None = broker.find_task(task_name)
     if aggregate_calls is None:
         raise NotImplementedError("Task aggregate_calls does not exist")
     task = Task(
+        task_name=task_name,
         task_id=str(uuid.uuid4()),
         task_status=TaskStatuses.PENDING,
     )
@@ -34,6 +36,8 @@ async def create_report(request: Request, report_request: ReportRequest):
     return TaskStatusResponse(
         status=task.task_status,
         task_id=task.task_id,
+        task_name=task_name,
+        recived=task.recived,
     )
 
 
