@@ -14,10 +14,7 @@ async def aggregate_calls(
     context: Annotated[Context, TaskiqDepends()],
     message_from: str | None = None,
     correlation_id: str | None = None,
-    received: datetime | None = None,
 ):
-    if received is None:
-        received = datetime.now()
     start_time = time.time()
     task_id = context.message.task_id
     calls_client: PhoneCallsClient = context.state.calls_client
@@ -26,7 +23,6 @@ async def aggregate_calls(
         _create_task_if_not_exists(
             task_id=task_id,
             task_name=context.message.task_name,
-            received=received,
             tasks_client=tasks_client,
         ),
     )
@@ -38,6 +34,7 @@ async def aggregate_calls(
             ),
         )
     tasks_results = await asyncio.gather(*tasks)
+    received = await create_or_update_task
     result = CallAggregationResult(
         data=tasks_results,
         total_duration=time.time() - start_time,
@@ -46,25 +43,24 @@ async def aggregate_calls(
         correlation_id=correlation_id,
         received=received,
     )
-    await create_or_update_task
     await tasks_client.save_results(task_id, result)
 
 
 async def _create_task_if_not_exists(
     task_id: str,
     task_name: str,
-    received: datetime,
     tasks_client: TasksClient,
 ):
     current_task = await tasks_client.get_task_by_id(task_id)
     if current_task is None:
+        current_task = Task(
+            task_name=task_name,
+            task_id=task_id,
+            task_status=TaskStatuses.PENDING,
+        )
         await tasks_client.save_or_update_task(
             task_id=task_id,
-            task_data=Task(
-                task_name=task_name,
-                task_id=task_id,
-                task_status=TaskStatuses.PENDING,
-                received=received,
-            )
+            task_data=current_task,
         )
     await tasks_client.set_in_work(task_id)
+    return current_task.received
