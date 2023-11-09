@@ -7,7 +7,7 @@ from db.clients import TasksClient
 import uuid
 
 
-broker = AioPikaBroker().with_id_generator(lambda: str(uuid.uuid5))
+broker = AioPikaBroker(settings.RABBITMQ_URI).with_id_generator(lambda: str(uuid.uuid5))
 
 
 @broker.on_event(TaskiqEvents.WORKER_STARTUP)

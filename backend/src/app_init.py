@@ -7,20 +7,24 @@ from db.clients import TasksClient
 from motor import motor_asyncio
 
 
-async def startup(app):
-    app.db_client = motor_asyncio.AsyncIOMotorClient(
-        settings.MONGO_URI
-    )
-    app.database = app.db_client.get_database(settings.DATABASE_NAME)  # type:ignore
-    app.tasks_client = TasksClient(database=app.database)
-    if not app.broker.is_worker_process:
-        await app.broker.startup()
+def startup_wrapper(app):
+    async def startup():
+        app.db_client = motor_asyncio.AsyncIOMotorClient(
+            settings.MONGO_URI
+        )
+        app.database = app.db_client.get_database(settings.DATABASE_NAME)  # type:ignore
+        app.tasks_client = TasksClient(database=app.database)
+        if not app.broker.is_worker_process:
+            await app.broker.startup()
+    return startup
 
 
-async def shutdown(app):
-    app.db_client.close()
-    if not broker.is_worker_process:
-        await broker.shutdown()
+def shutdown_wrapper(app):
+    async def shutdown():
+        app.db_client.close()
+        if not broker.is_worker_process:
+            await broker.shutdown()
+    return shutdown
 
 
 def init_app():
@@ -36,8 +40,8 @@ def init_app():
 
     app.broker = broker
 
-    app.add_event_handler("startup", startup(app))
-    app.add_event_handler("shutdown", shutdown(app))
+    app.add_event_handler("startup", startup_wrapper(app))
+    app.add_event_handler("shutdown", shutdown_wrapper(app))
 
     setup_endpoints(app)
     return app

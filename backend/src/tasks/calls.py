@@ -1,4 +1,3 @@
-from broker_init import broker
 import asyncio
 
 
