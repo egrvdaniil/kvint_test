@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from datetime import datetime
 
 
 class CallDurationCount(BaseModel):
@@ -20,6 +21,7 @@ class CallAggregation(BaseModel):
 class CallAggregationResult(BaseModel):
     data: list[CallAggregation]
     total_duration: float
+    received: datetime | None = None
     task_from: str | None = None
     task_to: str | None = None
     correlation_id: str | None = None

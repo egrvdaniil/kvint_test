@@ -4,6 +4,7 @@ from typing import Annotated, Optional
 from taskiq import Context, TaskiqDepends, TaskiqEvents, TaskiqState
 from db.clients import PhoneCallsClient, TasksClient
 import time
+from datetime import datetime
 
 
 async def aggregate_calls(
@@ -11,6 +12,7 @@ async def aggregate_calls(
     context: Annotated[Context, TaskiqDepends()],
     message_from: str | None = None,
     correlation_id: str | None = None,
+    received: datetime | None = None,
 ):
     start_time = time.time()
     task_id = context.message.task_id
@@ -31,5 +33,6 @@ async def aggregate_calls(
         task_from=message_from,
         task_to='client',
         correlation_id=correlation_id,
+        received=received,
     )
     await tasks_client.save_results(task_id, result)

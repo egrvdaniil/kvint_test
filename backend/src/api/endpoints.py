@@ -32,6 +32,7 @@ async def create_report(request: Request, report_request: ReportRequest):
         numbers=report_request.numbers,
         message_from='client_api',
         correlation_id=report_request.correlation_id,
+        received=task.received,
     )
     await save_in_db_task
     return TaskStatusResponse(
