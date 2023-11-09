@@ -1,4 +1,5 @@
 import asyncio
+from db.models import CallAggregationResult, CallAggregation, CallDurationCount
 
 
 async def aggregate_calls(

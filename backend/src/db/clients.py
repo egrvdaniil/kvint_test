@@ -2,6 +2,8 @@
 from pymongo.results import UpdateResult
 
 from db.collections import Task
+from db.models import CallDurationCount, CallAggregation
+import asyncio
 
 
 class BaseClient:
@@ -16,6 +18,23 @@ class BaseClient:
 
 class PhoneCallsClient(BaseClient):
     collection_name = 'phone_calls'
+
+    async def aggregate_call(self, number: str):
+        await asyncio.sleep(10)
+        call_duration_count = CallDurationCount(
+            sec_10=1,
+            sec_10_30=2,
+            sec_30=3,
+        )
+        return CallAggregation(
+            phone=number,
+            cnt_all_attempts=4,
+            cnt_att_dur=call_duration_count,
+            min_price_att=5,
+            max_price_att=6,
+            avg_dur_att=7.0,
+            sum_price_att_over_15=8.0
+        )
 
 
 class TasksClient(BaseClient):
