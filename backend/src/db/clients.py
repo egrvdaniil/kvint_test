@@ -37,5 +37,5 @@ class TasksClient(BaseClient):
         )
 
     async def get_statuses(self):
-        result = await self.collection.find({})
-        return result
+        cursor = self.collection.find({})
+        return [status async for status in cursor]

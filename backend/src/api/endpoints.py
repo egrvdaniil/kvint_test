@@ -35,7 +35,7 @@ async def create_report(request: Request, report_request: ReportRequest):
     )
     await save_in_db_task
     return TaskStatusResponse(
-        status=task.task_status,
+        task_status=task.task_status,
         task_id=task.task_id,
         task_name=task_name,
         recived=task.recived,

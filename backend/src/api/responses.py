@@ -9,7 +9,7 @@ class ReportResponse(CallAggregationResult):
 
 
 class TaskStatusResponse(BaseModel):
-    status: str
+    task_status: str
     task_id: str
     task_name: str
     recived: datetime
