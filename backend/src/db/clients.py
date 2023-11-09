@@ -4,6 +4,9 @@ from pymongo.results import UpdateResult
 from db.collections import Task
 from db.models import CallDurationCount, CallAggregation
 import asyncio
+from pydantic import BaseModel
+from datetime import datetime
+from choices import TaskStatuses
 
 
 class BaseClient:
@@ -17,7 +20,7 @@ class BaseClient:
 
 
 class PhoneCallsClient(BaseClient):
-    collection_name = 'phone_calls'
+    collection_name = "phone_calls"
 
     async def aggregate_call(self, number: str):
         await asyncio.sleep(10)
@@ -38,11 +41,11 @@ class PhoneCallsClient(BaseClient):
 
 
 class TasksClient(BaseClient):
-    collection_name = 'tasks'
+    collection_name = "tasks"
 
     async def get_task_by_id(self, task_id: str) -> Task | None:
         result = await self.collection.find_one(
-            {'task_id': task_id},
+            {"task_id": task_id},
         )
         if result is None:
             return None
@@ -50,7 +53,7 @@ class TasksClient(BaseClient):
 
     async def save_or_update_task(self, task_data: Task, task_id: str, upsert: bool = True) -> UpdateResult:
         return await self.collection.update_one(
-            {'task_id': task_id},
+            {"task_id": task_id},
             {"$set": task_data.model_dump()},
             upsert=upsert,
         )
@@ -58,3 +61,21 @@ class TasksClient(BaseClient):
     async def get_statuses(self):
         cursor = self.collection.find({})
         return [status async for status in cursor]
+
+    async def save_results(self, task_id: str, results: BaseModel):
+        return await self.collection.update_one(
+            {"task_id": task_id},
+            {
+                "task_status": TaskStatuses.COMPLETED,
+                "completed": datetime.now(),
+                "result": results.model_dump,
+            },
+        )
+
+    async def set_in_work(self, task_id: str):
+        return await self.collection.update_one(
+            {"task_id": task_id},
+            {
+                "task_status": TaskStatuses.IN_WORK,
+            },
+        )
