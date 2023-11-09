@@ -38,7 +38,7 @@ async def create_report(request: Request, report_request: ReportRequest):
         task_status=task.task_status,
         task_id=task.task_id,
         task_name=task_name,
-        recived=task.recived,
+        received=task.received,
     )
 
 

@@ -14,6 +14,6 @@ class Task(BaseModel):
     task_id: str
     task_status: str
     task_name: str
-    recived: datetime = Field(default_factory=datetime.now)
+    received: datetime = Field(default_factory=datetime.now)
     completed: datetime | None = None
     result: Any | None = None

@@ -12,7 +12,7 @@ class TaskStatusResponse(BaseModel):
     task_status: str
     task_id: str
     task_name: str
-    recived: datetime
+    received: datetime
     completed: datetime | None = None
 
 
