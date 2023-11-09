@@ -66,9 +66,11 @@ class TasksClient(BaseClient):
         return await self.collection.update_one(
             {"task_id": task_id},
             {
-                "task_status": TaskStatuses.COMPLETED,
-                "completed": datetime.now(),
-                "result": results.model_dump,
+                "$set": {
+                    "task_status": TaskStatuses.COMPLETED,
+                    "completed": datetime.now(),
+                    "result": results.model_dump(),
+                },
             },
         )
 
@@ -76,6 +78,8 @@ class TasksClient(BaseClient):
         return await self.collection.update_one(
             {"task_id": task_id},
             {
-                "task_status": TaskStatuses.IN_WORK,
+                "$set": {
+                    "task_status": TaskStatuses.IN_WORK,
+                },
             },
         )
