@@ -57,6 +57,7 @@ async def main(args: argparse.Namespace):
     print(f"Min task work duration: {min(total_times_list)}")
     print(f"Average task work duration: {sum(total_times_list) / len(total_times_list)}")
     print(f"Total working time: {time.time() - start_time}")
+    print(len(reports))
 
 
 if __name__=="__main__":
