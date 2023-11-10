@@ -24,7 +24,7 @@ ENV PYTHONFAULTHANDLER=1 \
     PYTHONUNBUFFERED=1
 
 WORKDIR /app
-RUN apt update && apt-get install netcat libpango-1.0-0 libpangoft2-1.0-0 -y
+RUN apt update && apt-get install netcat-traditional libpango-1.0-0 libpangoft2-1.0-0 -y
 COPY --from=builder /venv /venv
 COPY ./src ./src
 WORKDIR /app/src
