@@ -7,7 +7,7 @@ readme = "README.md"
 packages = [{include = "kvint_test"}]
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "3.11.6"
 motor = "^3.3.1"
 fastapi = "^0.104.1"
 taskiq = "^0.10.2"
@@ -16,7 +16,8 @@ taskiq-aio-pika = "^0.4.0"
 pytest-asyncio = "^0.21.1"
 pytest = "^7.4.3"
 uvicorn = "^0.24.0.post1"
-ijson = "^3.2.3"
+montydb = "^2.5.2"
+httpx = "^0.25.1"
 
 
 [build-system]
