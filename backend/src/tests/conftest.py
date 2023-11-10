@@ -58,11 +58,15 @@ class MongoCollectionMock:
 
 
 class MongoDBMock:
-    def __init__(self):
-        self.db = MontyClient(":memory:").db
+    def __init__(self, client: MontyClient):
+        self.client = client
+        self.db = self.client.get_database("test")
 
     def get_collection(self, name: str):
         return MongoCollectionMock(self.db.get_collection(name))
+
+    def clear_db(self):
+        self.client.drop_database("test")
 
 
 @pytest_asyncio.fixture
@@ -105,9 +109,16 @@ def test_result():
     }
 
 
+@pytest_asyncio.fixture(scope="session")
+def db_client():
+    return MontyClient(":memory:")
+
+
 @pytest_asyncio.fixture
-def database():
-    return MongoDBMock()
+def database(db_client):
+    db_mock = MongoDBMock(db_client)
+    yield db_mock
+    db_mock.clear_db()
 
 
 @pytest_asyncio.fixture
