@@ -106,4 +106,4 @@ Min task work duration: 2.785856008529663
 Average task work duration: 3.0934303307533266
 Total working time: 38.3143208026886
 ```
-Тест был сделан локально на Mac Air 2022
+Тест был сделан локально на MacBook Air 2022
