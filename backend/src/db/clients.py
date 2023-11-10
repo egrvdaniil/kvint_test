@@ -1,13 +1,12 @@
 
-from pymongo.results import UpdateResult
-
-from db.collections import Task
-from db.models import CallDurationCount, CallAggregation
-import asyncio
-from pydantic import BaseModel
 from datetime import datetime
+
 from choices import TaskStatuses
 from db.aggregations import get_phone_aggregation
+from db.collections import Task
+from db.models import CallAggregation, CallDurationCount
+from pydantic import BaseModel
+from pymongo.results import UpdateResult
 
 
 class BaseClient:

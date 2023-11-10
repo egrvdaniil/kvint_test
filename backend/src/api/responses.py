@@ -1,7 +1,7 @@
-from pydantic import BaseModel
-from typing import Any
 from datetime import datetime
+
 from db.models import CallAggregationResult
+from pydantic import BaseModel
 
 
 class ReportResponse(CallAggregationResult):

@@ -1,9 +1,9 @@
 from api import setup_endpoints  # type:ignore
 from broker_init import broker
 from config import settings
+from db.clients import TasksClient
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from db.clients import TasksClient
 from motor import motor_asyncio
 
 

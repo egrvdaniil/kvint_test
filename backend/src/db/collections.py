@@ -1,7 +1,7 @@
-from pydantic import BaseModel, Field
 from datetime import datetime
 from typing import Any
-from bson.objectid import ObjectId
+
+from pydantic import BaseModel, Field
 
 
 class PhoneCall(BaseModel):

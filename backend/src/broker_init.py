@@ -1,11 +1,11 @@
+import uuid
+
 from config import settings
+from db.clients import PhoneCallsClient, TasksClient
 from motor import motor_asyncio
 from taskiq import TaskiqEvents, TaskiqState
 from taskiq_aio_pika import AioPikaBroker  # type:ignore
 from tasks import setup_tasks
-from db.clients import TasksClient, PhoneCallsClient
-import uuid
-
 
 broker = AioPikaBroker(settings.RABBITMQ_URI).with_id_generator(lambda: str(uuid.uuid5))
 

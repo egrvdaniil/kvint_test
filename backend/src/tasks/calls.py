@@ -1,12 +1,12 @@
 import asyncio
-from db.models import CallAggregationResult, CallAggregation, CallDurationCount
-from typing import Annotated, Optional
-from taskiq import Context, TaskiqDepends, TaskiqEvents, TaskiqState
+import time
+from typing import Annotated
+
+from choices import TaskStatuses
 from db.clients import PhoneCallsClient, TasksClient
 from db.collections import Task
-import time
-from datetime import datetime
-from choices import TaskStatuses
+from db.models import CallAggregationResult
+from taskiq import Context, TaskiqDepends
 
 
 async def aggregate_calls(
