@@ -4,7 +4,22 @@ services:
   web:
     build: .
     ports:
-      - 80:8000
+      - 8000:8000
     environment:
       - MONGO_URI
       - DATABASE_NAME
+      - RABBITMQ_URI
+
+  workers:
+    build: .
+    environment:
+      - MONGO_URI
+      - DATABASE_NAME
+      - RABBITMQ_URI
+    entrypoint: ./entrypoint_workers.sh
+
+  rabbitmq:
+    image: rabbitmq:latest
+
+  mongo:
+    image: mongo:latest
