@@ -27,8 +27,7 @@ class PhoneCallsClient(BaseClient):
         cursor = self.collection.aggregate(
             get_phone_aggregation(number)
         )
-        aggregation_results = await cursor.to_list(length=1)
-        aggregation_result = aggregation_results[0]
+        aggregation_result = await anext(cursor)
 
         call_duration_count = CallDurationCount(
             sec_10=aggregation_result["sec_10"],
