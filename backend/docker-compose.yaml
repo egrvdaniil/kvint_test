@@ -11,7 +11,7 @@ services:
       - DATABASE_NAME
       - RABBITMQ_URI
     depends_on:
-      - depends_on
+      - rabbitmq
       - mongo
 
   workers:
@@ -23,7 +23,7 @@ services:
       - RABBITMQ_URI
     entrypoint: ./entrypoint_workers.sh
     depends_on:
-      - depends_on
+      - rabbitmq
       - mongo
 
   rabbitmq:
