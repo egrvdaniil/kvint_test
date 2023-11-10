@@ -24,9 +24,11 @@ class PhoneCallsClient(BaseClient):
     collection_name = "phone_calls"
 
     async def aggregate_call(self, number: int):
-        aggregation_result = await self.collection.aggregate(
+        cursor = self.collection.aggregate(
             get_phone_aggregation(number)
         )
+        aggregation_results = await cursor.to_list(length=1)
+        aggregation_result = aggregation_results[0]
 
         call_duration_count = CallDurationCount(
             sec_10=aggregation_result["sec_10"],
