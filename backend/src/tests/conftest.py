@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Any
 
 import pytest_asyncio
@@ -82,9 +83,9 @@ def test_result():
                 "phone": 2,
                 "cnt_all_attempts": 12675,
                 "cnt_att_dur": {
-                    "10_sec": 675,
-                    "10_30_sec": 2000,
-                    "30_sec": 12000
+                    "sec_10": 9108,
+                    "sec_10_30": 16496,
+                    "sec_30": 74396,
                 },
                 "min_price_att": 30,
                 "max_price_att": 1500,
@@ -95,12 +96,12 @@ def test_result():
                 "phone": 6,
                 "cnt_all_attempts": 46759,
                 "cnt_att_dur": {
-                    "10_sec": 759,
-                    "10_30_sec": 6000,
-                    "30_sec": 40000
+                    "sec_10": 9108,
+                    "sec_10_30": 16496,
+                    "sec_30": 74396,
                 },
-                "min_price_att": 27.86,
-                "max_price_att": 2876.55,
+                "min_price_att": 27,
+                "max_price_att": 2876,
                 "avg_dur_att": 123.7,
                 "sum_price_att_over_15": 4075.62
             }
@@ -132,6 +133,20 @@ def test_task(tasks_collection):
         task_id="some_id",
         task_status="pending",
         task_name="tasks.calls:aggregate_calls",
+    )
+    tasks_collection.insert_one(task.model_dump())
+    return task
+
+
+@pytest_asyncio.fixture
+def completed_task(tasks_collection, test_result):
+    task = Task(
+        task_id="some_id",
+        task_status="completed",
+        task_name="tasks.calls:aggregate_calls",
+        received=datetime.now(),
+        completed=datetime.now(),
+        result=test_result,
     )
     tasks_collection.insert_one(task.model_dump())
     return task

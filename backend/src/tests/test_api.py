@@ -13,10 +13,18 @@ def test_task_creation(api_client, tasks_collection):
     assert task is not None
 
 
-def test_get_task_info(api_client, tasks_collection, test_task):
+def test_get_task_info(api_client, test_task):
     response = api_client.get(
         f"/api/v1/tasks/{test_task.task_id}",
     )
 
     assert response.json()["task_status"] == "pending"
     assert response.json()["task_id"] == test_task.task_id
+
+
+def test_get_result(api_client, completed_task, test_result):
+    response = api_client.get(
+        f"/api/v1/report/{completed_task.task_id}",
+    )
+
+    assert response.json()["correlation_id"] == test_result["correlation_id"]
