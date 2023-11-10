@@ -5,7 +5,7 @@ from bson.objectid import ObjectId
 
 
 class PhoneCall(BaseModel):
-    phone: str
+    phone: int
     start_date: datetime
     end_date: datetime
 

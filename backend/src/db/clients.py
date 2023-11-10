@@ -7,6 +7,7 @@ import asyncio
 from pydantic import BaseModel
 from datetime import datetime
 from choices import TaskStatuses
+from db.aggregations import get_phone_aggregation
 
 
 class BaseClient:
@@ -22,21 +23,24 @@ class BaseClient:
 class PhoneCallsClient(BaseClient):
     collection_name = "phone_calls"
 
-    async def aggregate_call(self, number: str):
-        await asyncio.sleep(10)
+    async def aggregate_call(self, number: int):
+        aggregation_result = await self.collection.aggregate(
+            get_phone_aggregation(number)
+        )
+
         call_duration_count = CallDurationCount(
-            sec_10=1,
-            sec_10_30=2,
-            sec_30=3,
+            sec_10=aggregation_result["sec_10"],
+            sec_10_30=aggregation_result["sec_10_30"],
+            sec_30=aggregation_result["sec_30"],
         )
         return CallAggregation(
             phone=number,
-            cnt_all_attempts=4,
+            cnt_all_attempts=aggregation_result["cnt_all_attempts"],
             cnt_att_dur=call_duration_count,
-            min_price_att=5,
-            max_price_att=6,
-            avg_dur_att=7.0,
-            sum_price_att_over_15=8.0
+            min_price_att=aggregation_result["min_price_att"],
+            max_price_att=aggregation_result["max_price_att"],
+            avg_dur_att=aggregation_result["avg_dur_att"],
+            sum_price_att_over_15=aggregation_result["sum_price_att_over_15"],
         )
 
 

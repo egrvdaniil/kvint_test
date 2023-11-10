@@ -9,7 +9,7 @@ class CallDurationCount(BaseModel):
 
 
 class CallAggregation(BaseModel):
-    phone: str
+    phone: int
     cnt_all_attempts: int
     cnt_att_dur: CallDurationCount
     min_price_att: int

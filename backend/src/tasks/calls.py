@@ -10,7 +10,7 @@ from choices import TaskStatuses
 
 
 async def aggregate_calls(
-    numbers: list[str],
+    numbers: list[int],
     context: Annotated[Context, TaskiqDepends()],
     message_from: str | None = None,
     correlation_id: str | None = None,
