@@ -25,6 +25,11 @@ services:
 
   rabbitmq:
     image: rabbitmq:latest
+    healthcheck:
+      test: [ "CMD", "nc", "-z", "localhost", "5672" ]
+      interval: 5s
+      timeout: 15s
+      retries: 1
 
   mongo:
     image: mongo:latest
