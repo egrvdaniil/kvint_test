@@ -1,4 +1,4 @@
-FROM python:3.11.2 as builder
+FROM python:3.11.6 as builder
 
 ENV PYTHONFAULTHANDLER=1 \
     PYTHONHASHSEED=random \
@@ -17,7 +17,7 @@ RUN python -m venv /venv
 COPY pyproject.toml poetry.lock ./
 RUN poetry export -f requirements.txt | /venv/bin/pip install -r /dev/stdin
 
-FROM python:3.11.2-slim as final
+FROM python:3.11.6-slim as final
 
 ENV PYTHONFAULTHANDLER=1 \
     PYTHONHASHSEED=random \
