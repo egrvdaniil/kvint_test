@@ -1,11 +1,11 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from datetime import datetime
 
 
 class CallDurationCount(BaseModel):
-    sec_10: int
-    sec_10_30: int
-    sec_30: int
+    sec_10: int = Field(alias='10_sec')
+    sec_10_30: int = Field(alias='10_30_sec')
+    sec_30: int = Field(alias='30_sec')
 
 
 class CallAggregation(BaseModel):
