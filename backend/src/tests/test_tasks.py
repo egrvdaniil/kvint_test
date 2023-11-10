@@ -1,5 +1,6 @@
 import pytest
 
+
 @pytest.mark.asyncio
 async def test_aggregate_task(broker, tasks_collection, test_task):
     aggregate_task = broker.find_task("tasks.calls:aggregate_calls")
