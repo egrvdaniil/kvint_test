@@ -19,6 +19,7 @@ async def startup(state: TaskiqState) -> None:
     state.database = db_client.get_database(settings.DATABASE_NAME)
     state.tasks_client = TasksClient(database=state.database)
     state.calls_client = PhoneCallsClient(database=state.database)
+    await state.calls_client.create_indexes()
 
 
 @broker.on_event(TaskiqEvents.WORKER_SHUTDOWN)

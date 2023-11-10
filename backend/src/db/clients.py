@@ -6,11 +6,13 @@ from db.aggregations import get_phone_aggregation
 from db.collections import Task
 from db.models import CallAggregation, CallDurationCount
 from pydantic import BaseModel
+from pymongo import ASCENDING
 from pymongo.results import UpdateResult
 
 
 class BaseClient:
     collection_name: str | None = None
+    indexes: list[tuple[str, int]] | None = None
 
     def __init__(self, database) -> None:
         if not self.collection_name:
@@ -18,9 +20,15 @@ class BaseClient:
         self.database = database
         self.collection = database.get_collection(self.collection_name)
 
+    async def create_indexes(self):
+        if self.indexes is None:
+            return
+        await self.collection.create_index(self.indexes)
+
 
 class PhoneCallsClient(BaseClient):
     collection_name = "phone_calls"
+    indexes = [('phone', ASCENDING)]
 
     async def aggregate_call(self, number: int):
         cursor = self.collection.aggregate(
