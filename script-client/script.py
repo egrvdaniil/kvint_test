@@ -14,6 +14,9 @@ async def wait_for_task(task_id: str, client: httpx.AsyncClient, url: str):
         response = await client.get(url + f"/api/v1/tasks/{task_id}")
         if response.json()["task_status"] == "completed":
             break
+        if response.json()["task_status"] == "error":
+            error_message = response.json()["error_message"]
+            raise Exception(f"Task failed: {error_message}")
         await asyncio.sleep(0.5)
         print(f"{task_id}: is not ready, sleep for 0.5 seconds")
 
