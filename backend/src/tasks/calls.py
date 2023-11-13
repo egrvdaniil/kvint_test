@@ -1,5 +1,6 @@
 import asyncio
 import time
+from datetime import datetime
 from typing import Annotated
 
 from choices import TaskStatuses
@@ -14,7 +15,7 @@ async def aggregate_calls(
     context: Annotated[Context, TaskiqDepends()],
     message_from: str | None = None,
     correlation_id: str | None = None,
-):
+) -> None:
     start_time = time.time()
     task_id = context.message.task_id
     calls_client: PhoneCallsClient = context.state.calls_client
@@ -53,7 +54,7 @@ async def _create_task_if_not_exists(
     task_id: str,
     task_name: str,
     tasks_client: TasksClient,
-):
+) -> datetime:
     current_task = await tasks_client.get_task_by_id(task_id)
     if current_task is None:
         current_task = Task(

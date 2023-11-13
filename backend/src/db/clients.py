@@ -21,7 +21,7 @@ class BaseClient:
         self.database = database
         self.collection = database.get_collection(self.collection_name)
 
-    async def create_indexes(self):
+    async def create_indexes(self) -> None:
         if self.indexes is None:
             return
         await self.collection.create_index(self.indexes)
