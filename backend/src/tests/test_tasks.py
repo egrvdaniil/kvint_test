@@ -1,4 +1,5 @@
 import pytest
+from unittest.mock import Mock
 
 
 @pytest.mark.asyncio
@@ -42,3 +43,19 @@ async def test_aggregate_task(broker, tasks_collection, test_task):
             'sum_price_att_over_15': 58974760.0
         },
     ]
+
+
+@pytest.mark.asyncio
+async def test_aggregate_task_error(broker, tasks_collection, test_task):
+    broker.state.calls_client.aggregate_call = Mock(side_effect=Exception('Test'))
+    aggregate_task = broker.find_task("tasks.calls:aggregate_calls")
+    result = await aggregate_task.kicker().with_task_id(test_task.task_id).kiq(
+        numbers=[1, 2, 3],
+        message_from='client_api',
+        correlation_id="correlation_id",
+    )
+    await result.wait_result()
+
+    updated_task = tasks_collection.find_one({"task_id": test_task.task_id})
+    assert updated_task['task_status'] == 'error'
+    assert updated_task['error_message'] == 'Test'

@@ -19,12 +19,10 @@ async def aggregate_calls(
     task_id = context.message.task_id
     calls_client: PhoneCallsClient = context.state.calls_client
     tasks_client: TasksClient = context.state.tasks_client
-    create_or_update_task = asyncio.create_task(
-        _create_task_if_not_exists(
-            task_id=task_id,
-            task_name=context.message.task_name,
-            tasks_client=tasks_client,
-        ),
+    received = await _create_task_if_not_exists(
+        task_id=task_id,
+        task_name=context.message.task_name,
+        tasks_client=tasks_client,
     )
     tasks = []
     for number in numbers:
@@ -34,7 +32,6 @@ async def aggregate_calls(
             ),
         )
     tasks_results = await asyncio.gather(*tasks)
-    received = await create_or_update_task
     result = CallAggregationResult(
         data=tasks_results,
         total_duration=time.time() - start_time,

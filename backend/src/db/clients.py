@@ -101,7 +101,7 @@ class TasksClient(BaseClient):
             {"task_id": task_id},
             {
                 "$set": {
-                    "task_status": TaskStatuses.IN_WORK,
+                    "task_status": TaskStatuses.ERROR,
                     "error_message": error_message,
                 },
             },
