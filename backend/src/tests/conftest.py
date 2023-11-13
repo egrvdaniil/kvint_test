@@ -10,6 +10,7 @@ from fastapi.testclient import TestClient
 from montydb import MontyClient, MontyCollection  # type:ignore
 from taskiq import InMemoryBroker
 from tasks import setup_tasks
+from broker_utils import setup_middlewares
 
 
 class MongoCursorMock:
@@ -158,6 +159,7 @@ def broker(database):
     broker.state.database = database
     broker.state.tasks_client = TasksClient(database=database)
     broker.state.calls_client = PhoneCallsClient(database=database)
+    setup_middlewares(broker)
     setup_tasks(broker)
     return broker
 
