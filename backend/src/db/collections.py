@@ -17,3 +17,4 @@ class Task(BaseModel):
     received: datetime = Field(default_factory=datetime.now)
     completed: datetime | None = None
     result: Any | None = None
+    error_message: str | None = None

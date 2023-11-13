@@ -14,6 +14,7 @@ class TaskStatusResponse(BaseModel):
     task_name: str
     received: datetime
     completed: datetime | None = None
+    error_message: str | None = None
 
 
 class TaskStatusesListResponse(BaseModel):

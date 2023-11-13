@@ -95,3 +95,14 @@ class TasksClient(BaseClient):
                 },
             },
         )
+
+    async def error(self, task_id: str, error_message: str):
+        return await self.collection.update_one(
+            {"task_id": task_id},
+            {
+                "$set": {
+                    "task_status": TaskStatuses.IN_WORK,
+                    "error_message": error_message,
+                },
+            },
+        )
