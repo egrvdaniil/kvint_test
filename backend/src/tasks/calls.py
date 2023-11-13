@@ -19,11 +19,17 @@ async def aggregate_calls(
     task_id = context.message.task_id
     calls_client: PhoneCallsClient = context.state.calls_client
     tasks_client: TasksClient = context.state.tasks_client
-    received = await _create_task_if_not_exists(
-        task_id=task_id,
-        task_name=context.message.task_name,
-        tasks_client=tasks_client,
+    create_task = asyncio.create_task(
+        _create_task_if_not_exists(
+            task_id=task_id,
+            task_name=context.message.task_name,
+            tasks_client=tasks_client,
+        ),
     )
+    is_exists = await calls_client.check_numbers(numbers)
+    received = await create_task
+    if is_exists is False:
+        raise Exception("Phones does not exists")
     tasks = []
     for number in numbers:
         tasks.append(

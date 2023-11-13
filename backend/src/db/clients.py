@@ -1,4 +1,5 @@
 
+import asyncio
 from datetime import datetime
 
 from choices import TaskStatuses
@@ -30,7 +31,18 @@ class PhoneCallsClient(BaseClient):
     collection_name = "phone_calls"
     indexes = [('phone', ASCENDING)]
 
-    async def aggregate_call(self, number: int):
+    async def check_number(self, number: int) -> bool:
+        call = await self.collection.find_one({"phone": number})
+        return call is not None
+
+    async def check_numbers(self, numbers: list[int]) -> bool:
+        tasks = []
+        for number in numbers:
+            tasks.append(asyncio.create_task(self.check_number(number)))
+        result = await asyncio.gather(*tasks)
+        return all(result)
+
+    async def aggregate_call(self, number: int) ->  CallAggregation:
         cursor = self.collection.aggregate(
             get_phone_aggregation(number)
         )
@@ -74,7 +86,7 @@ class TasksClient(BaseClient):
         cursor = self.collection.find({})
         return [status async for status in cursor]
 
-    async def save_results(self, task_id: str, results: BaseModel):
+    async def save_results(self, task_id: str, results: BaseModel) -> UpdateResult:
         return await self.collection.update_one(
             {"task_id": task_id},
             {
@@ -86,7 +98,7 @@ class TasksClient(BaseClient):
             },
         )
 
-    async def set_in_work(self, task_id: str):
+    async def set_in_work(self, task_id: str) -> UpdateResult:
         return await self.collection.update_one(
             {"task_id": task_id},
             {
@@ -96,7 +108,7 @@ class TasksClient(BaseClient):
             },
         )
 
-    async def error(self, task_id: str, error_message: str):
+    async def error(self, task_id: str, error_message: str) -> UpdateResult:
         return await self.collection.update_one(
             {"task_id": task_id},
             {
