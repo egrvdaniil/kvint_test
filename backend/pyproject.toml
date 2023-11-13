@@ -18,8 +18,15 @@ pytest = "^7.4.3"
 uvicorn = "^0.24.0.post1"
 montydb = "^2.5.2"
 httpx = "^0.25.1"
+pytest-env = "^1.1.1"
 
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+
+[tool.pytest.ini_options]
+env = [
+    "IS_TEST=True",
+]
