@@ -129,6 +129,11 @@ def tasks_collection(database):
 
 
 @pytest_asyncio.fixture
+def calls_collection(database):
+    return database.get_collection("phone_calls").collection
+
+
+@pytest_asyncio.fixture
 def test_task(tasks_collection):
     task = Task(
         task_id="some_id",
@@ -173,3 +178,26 @@ async def api_client(database, broker):
     app.calls_client = PhoneCallsClient(database=database)
     setup_endpoints(app)
     return TestClient(app)
+
+
+@pytest_asyncio.fixture(autouse=True)
+async def calls(calls_collection):
+    calls_collection.insert_many(
+        [
+            {
+                "phone": 1,
+                "start_date": 1684957028364,
+                "end_date": 1684957130364,
+            },
+            {
+                "phone": 2,
+                "start_date": 1684957028364,
+                "end_date": 1684957084364,
+            },
+            {
+                "phone": 3,
+                "start_date": 1684957028364,
+                'end_date': 1684957084364,
+            }
+        ],
+    )

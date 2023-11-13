@@ -2,7 +2,7 @@ def test_task_creation(api_client, tasks_collection):
     response = api_client.post(
         "/api/v1/report",
         json={
-            "numbers": [11, 13],
+            "numbers": [1, 2, 3],
             "correlation_id": "123123123"
         },
     )
